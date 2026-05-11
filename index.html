@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Мемкоин Гайд</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --card: #111118;
+    --border: #1e1e2e;
+    --green: #00ff87;
+    --red: #ff3b5c;
+    --yellow: #ffd60a;
+    --dim: #444466;
+    --text: #e0e0f0;
+    --muted: #7070a0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,255,135,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,135,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 60px 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HEADER */
+  .hero {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+
+  .tag {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--green);
+    border: 1px solid var(--green);
+    padding: 4px 12px;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.5s 0.1s forwards;
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 10vw, 88px);
+    line-height: 0.95;
+    letter-spacing: 2px;
+    color: #fff;
+    opacity: 0;
+    animation: fadeUp 0.5s 0.2s forwards;
+  }
+
+  h1 span { color: var(--green); }
+
+  .hero-sub {
+    margin-top: 20px;
+    color: var(--muted);
+    font-size: 14px;
+    font-family: 'Space Mono', monospace;
+    opacity: 0;
+    animation: fadeUp 0.5s 0.35s forwards;
+  }
+
+  /* STAT ROW */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.5s 0.45s forwards;
+  }
+
+  .stat {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 20px 16px;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    line-height: 1;
+  }
+
+  .stat-num.red { color: var(--red); }
+  .stat-num.yellow { color: var(--yellow); }
+  .stat-num.green { color: var(--green); }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 4px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* SECTION */
+  .section {
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fadeUp 0.5s forwards;
+  }
+
+  .section:nth-child(1) { animation-delay: 0.5s; }
+  .section:nth-child(2) { animation-delay: 0.6s; }
+  .section:nth-child(3) { animation-delay: 0.7s; }
+  .section:nth-child(4) { animation-delay: 0.8s; }
+  .section:nth-child(5) { animation-delay: 0.9s; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--green);
+    background: rgba(0,255,135,0.08);
+    border: 1px solid rgba(0,255,135,0.2);
+    padding: 2px 8px;
+    white-space: nowrap;
+  }
+
+  h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 1px;
+    color: #fff;
+    font-weight: 400;
+  }
+
+  /* CARDS */
+  .cards { display: flex; flex-direction: column; gap: 10px; }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 16px 18px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    transition: border-color 0.2s;
+  }
+
+  .card:hover { border-color: var(--dim); }
+
+  .card-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .card-title {
+    font-weight: 600;
+    font-size: 14px;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+
+  .card-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* RED FLAGS */
+  .flag {
+    background: rgba(255,59,92,0.05);
+    border: 1px solid rgba(255,59,92,0.2);
+    padding: 14px 18px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    margin-bottom: 8px;
+  }
+
+  .flag-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--red);
+    margin-top: 8px;
+    flex-shrink: 0;
+  }
+
+  .flag-text {
+    font-size: 13px;
+    color: #c0c0d8;
+    line-height: 1.6;
+  }
+
+  .flag-text strong { color: var(--red); }
+
+  /* GREEN FLAGS */
+  .gflag {
+    background: rgba(0,255,135,0.04);
+    border: 1px solid rgba(0,255,135,0.15);
+    padding: 14px 18px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    margin-bottom: 8px;
+  }
+
+  .gflag-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    margin-top: 8px;
+    flex-shrink: 0;
+  }
+
+  .gflag-text {
+    font-size: 13px;
+    color: #c0c0d8;
+    line-height: 1.6;
+  }
+
+  .gflag-text strong { color: var(--green); }
+
+  /* TOOLS */
+  .tools { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  .tool {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 16px;
+    transition: border-color 0.2s;
+  }
+
+  .tool:hover { border-color: var(--dim); }
+
+  .tool-name {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--green);
+    margin-bottom: 6px;
+  }
+
+  .tool-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* RULE BOX */
+  .rule-box {
+    background: rgba(255,214,10,0.05);
+    border: 1px solid rgba(255,214,10,0.25);
+    padding: 20px 22px;
+    margin-top: 8px;
+  }
+
+  .rule-box p {
+    font-size: 13px;
+    color: #c0c0d8;
+    line-height: 1.7;
+    margin-bottom: 10px;
+  }
+
+  .rule-box p:last-child { margin-bottom: 0; }
+
+  .rule-box strong { color: var(--yellow); }
+
+  /* DISCLAIMER */
+  .disclaimer {
+    margin-top: 56px;
+    padding: 20px;
+    border: 1px dashed var(--dim);
+    text-align: center;
+  }
+
+  .disclaimer p {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.8;
+    letter-spacing: 0.3px;
+  }
+
+  .disclaimer strong { color: var(--red); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 520px) {
+    .stats { grid-template-columns: 1fr 1fr; }
+    .tools { grid-template-columns: 1fr; }
+    .stat:last-child { grid-column: span 2; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="tag">Educational Guide</div>
+    <h1>КАК НЕ<br><span>ПОТЕРЯТЬ</span><br>НА МЕМАХ</h1>
+    <p class="hero-sub">// всё что нужно знать перед покупкой любого мемкоина</p>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-num red">90%</div>
+      <div class="stat-label">умирают</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num yellow">72ч</div>
+      <div class="stat-label">средняя жизнь скама</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num green">5%</div>
+      <div class="stat-label">портфель — максимум</div>
+    </div>
+  </div>
+
+  <!-- SECTION 1 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2>Инструменты анализа</h2>
+    </div>
+    <div class="tools">
+      <div class="tool">
+        <div class="tool-name">Dexscreener</div>
+        <div class="tool-desc">Графики, объём, ликвидность, возраст контракта. Первое место куда идёшь.</div>
+      </div>
+      <div class="tool">
+        <div class="tool-name">Bubblemaps</div>
+        <div class="tool-desc">Показывает связи между кошельками. Сразу видно — один человек держит 40%.</div>
+      </div>
+      <div class="tool">
+        <div class="tool-name">RugCheck / Honeypot</div>
+        <div class="tool-desc">Проверка контракта: можно ли продать монету вообще.</div>
+      </div>
+      <div class="tool">
+        <div class="tool-name">Etherscan / Solscan</div>
+        <div class="tool-desc">Смотришь транзакции создателя, когда он вывел ликвидность.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2>Красные флаги — уходи</h2>
+    </div>
+    <div class="flag">
+      <div class="flag-dot"></div>
+      <div class="flag-text"><strong>Один кошелёк держит &gt;20%</strong> — он может уронить цену в любой момент одной транзакцией.</div>
+    </div>
+    <div class="flag">
+      <div class="flag-dot"></div>
+      <div class="flag-text"><strong>Ликвидность не заблокирована</strong> — разработчик может забрать всё прямо сейчас. Проверяй через RugCheck.</div>
+    </div>
+    <div class="flag">
+      <div class="flag-dot"></div>
+      <div class="flag-text"><strong>Анонимная команда + нет соцсетей</strong> — за проектом никто не стоит. Пропал — и ищи их.</div>
+    </div>
+    <div class="flag">
+      <div class="flag-dot"></div>
+      <div class="flag-text"><strong>Контракт нельзя изменить командой</strong> — если ownership не отдан (renounced), они могут поменять налог на продажу хоть до 100%.</div>
+    </div>
+    <div class="flag">
+      <div class="flag-dot"></div>
+      <div class="flag-text"><strong>Резкий памп без новостей</strong> — кто-то накачивает чтобы продать тебе дороже. Классический pump & dump.</div>
+    </div>
+    <div class="flag">
+      <div class="flag-dot"></div>
+      <div class="flag-text"><strong>Инфлюенсер рекламирует за деньги</strong> — купил заранее по $0.00001, тебе продаёт по $0.001. Ты выход для него.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2>Зелёные флаги — смотри дальше</h2>
+    </div>
+    <div class="gflag">
+      <div class="gflag-dot"></div>
+      <div class="gflag-text"><strong>Ликвидность заблокирована на 6+ месяцев</strong> — разработчик не может просто уйти с деньгами.</div>
+    </div>
+    <div class="gflag">
+      <div class="gflag-dot"></div>
+      <div class="gflag-text"><strong>Ownership renounced</strong> — контракт отдан, никто не может поменять правила игры.</div>
+    </div>
+    <div class="gflag">
+      <div class="gflag-dot"></div>
+      <div class="gflag-text"><strong>Топ-10 холдеров держат суммарно &lt;30%</strong> — распределение здоровое, нет одного хозяина.</div>
+    </div>
+    <div class="gflag">
+      <div class="gflag-dot"></div>
+      <div class="gflag-text"><strong>Органичный рост объёма</strong> — не один резкий спайк, а постепенное увеличение активности.</div>
+    </div>
+    <div class="gflag">
+      <div class="gflag-dot"></div>
+      <div class="gflag-text"><strong>Активное комьюнити без ботов</strong> — живые обсуждения в телеграме, реальные аватарки, разные мнения.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2>Правила выживания</h2>
+    </div>
+    <div class="rule-box">
+      <p><strong>Правило 1%–5%.</strong> Никогда не вкладывай в один мемкоин больше 5% от того что готов потерять полностью. Потому что потерять — вполне реальный исход.</p>
+      <p><strong>Забери хотя бы вложенное.</strong> Зашёл на $100, монета выросла x3 — забери $100, играй на прибыль. Так ты уже в безопасности.</p>
+      <p><strong>Не верь хайпу в чатах.</strong> Если тебе пишут "залетай сейчас или никогда" — это сигнал что кто-то хочет тебя использовать как выход.</p>
+      <p><strong>Ставь стоп-лосс в голове.</strong> Реши заранее: упало на -50% — ты выходишь. Без исключений.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 5 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2>Почему 90% рагаются</h2>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="card-icon">⚙️</div>
+        <div>
+          <div class="card-title">Создать мемкоин — это 5 минут</div>
+          <div class="card-desc">Буквально любой может задеплоить токен через pump.fun или аналоги. Барьер входа ноль — поэтому их тысячи в день.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🎭</div>
+        <div>
+          <div class="card-title">Анонимность — нет ответственности</div>
+          <div class="card-desc">Украл деньги — создал новый кошелёк — повторил. Никаких юридических последствий в большинстве случаев.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🧠</div>
+        <div>
+          <div class="card-title">FOMO работает против тебя</div>
+          <div class="card-desc">Страх пропустить иксы отключает критическое мышление. Именно на это рассчитывают те кто рагает.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DISCLAIMER -->
+  <div class="disclaimer">
+    <p>
+      ⚠️ <strong>СДЕЛАНО В ОБРАЗОВАТЕЛЬНЫХ ЦЕЛЯХ</strong> ⚠️<br>
+      Этот гайд не является финансовым советом.<br>
+      Мемкоины — высокорискованный актив. <strong>90% из них обнуляются.</strong><br>
+      Инвестируй только то, что готов потерять полностью.<br>
+      <br>
+      // образовательный материал · не реклама · не инвестиционный совет
+    </p>
+  </div>
+
+</div>
+</body>
+</html>
