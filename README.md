@@ -54,4 +54,7 @@ DTrade Bot
 <img width="387" height="479" alt="image" src="https://github.com/user-attachments/assets/f225b3f8-effc-4ccd-ac88-83d85408d8fa" />
 
 ⭐ Поддержите проект: Если этот гайд был вам полезен, пожалуйста, поддержите репозиторий:Поставьте звезду (Star) сверху страницы — это очень помогает развитию проекта!
+
+
+
 <img width="394" height="253" alt="image" src="https://github.com/user-attachments/assets/e912762f-943b-42de-9306-016ac2e60228" />
